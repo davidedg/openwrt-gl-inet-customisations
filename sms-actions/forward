@@ -1,10 +1,8 @@
-#!/bin/bash
+#!/bin/sh
+# SMS Custom Actions - replace /etc/forward with this file
 
-# /etc/forward - custom actions
 # Call the original script first
 [[ -x /etc/forward-original ]] && /etc/forward-original "$@" &
-
-. /lib/functions/modem.sh
 
 SCRIPTSDIR="/etc/sms-actions"
 
@@ -15,19 +13,23 @@ for script in $scripts; do
   [[ -f "$D/$script" ]] && [[ -x "$D/$script" ]] && "$D/$script" "$@" &
 done
 
-# Normal scripts, ran asynchronously unless they have an extension ".wait"
+# Normal scripts, ran asynchronously unless they have an extension ".wait" or ".waitNN" (wait max NN seconds)
 D="$SCRIPTSDIR"
 scripts=$(ls "$D" | sort)
 for script in $scripts; do
     [[ -x "$D/$script" ]] || continue
     [[ -f "$D/$script" ]] || continue
-    if [[ "$script" =~ \.wait$ ]]; then
-      "$D/$script" "$@"
-    elif [[ "$script" =~ \.wait([0-9]+)$ ]]; then
-      waitterm="${BASH_REMATCH[1]}"
-      waitkill="$((waitterm + 5))" # extra 5 seconds before KILL
-      timeout -k $waitkill $waitterm "$D/$script" "$@"
-    else
-      "$D/$script" "$@" &
-    fi
+    case "$script" in
+        *.wait)
+            "$D/$script" "$@"
+            ;;
+        *.wait[0-9]*)
+            waitterm=$(echo "$script" | sed -n 's/.*\.wait\([0-9]\+\)$/\1/p')
+            waitkill="$((waitterm + 5))" # extra 5 seconds before KILL
+            timeout -k $waitkill $waitterm "$D/$script" "$@"
+            ;;
+        *)
+            "$D/$script" "$@" &
+            ;;
+    esac
 done
