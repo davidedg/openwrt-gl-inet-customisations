@@ -1,0 +1,14 @@
+root@GL-XE300:~# ubus call battery info
+{
+        "soc": 100,
+        "charging": true,
+        "temperature": 36.299999,
+        "cycles": 1
+}
+root@GL-XE300:~# ubus call mcu status
+{
+        "temperature": "36.3",
+        "charging_status": "1",
+        "charge_cnt": "1",
+        "charge_percent": "100"
+}
