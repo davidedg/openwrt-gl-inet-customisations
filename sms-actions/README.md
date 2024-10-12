@@ -2,19 +2,19 @@
 
 Enable SMS Forwarding in the GUI. This will configure `/tmp/smstools.cfg` with `eventhandler = /etc/forward`
 
-Copy the original script:
-
-    cp /etc/forward /etc/forward-original
-
 Create directories /etc/sms-actions/...
 
     mkdir -p /etc/sms-actions/init
 
+Copy the original script:
+
+    cp /etc/forward /etc/forward-original
+
 Then overwrite it with this custom script:
 
-    tee /etc/forward <<EOF
     #!/bin/bash
 
+    # /etc/forward - custom actions
     # Call the original script first
     [[ -x /etc/forward-original ]] && /etc/forward-original "$@" &
 
@@ -45,6 +45,5 @@ Then overwrite it with this custom script:
           "$D/$script" "$@" &
         fi
     done
-
 \
 Implement some scripts in /etc/sms-actions/ 
