@@ -1,5 +1,6 @@
 #!/bin/sh
 # SMS Custom Actions - replace /etc/forward with this file
+# https://github.com/davidedg/gl-inet-customisations/blob/main/sms-actions/forward
 
 # Call the original script first
 [[ -x /etc/forward-original ]] && /etc/forward-original "$@" &
