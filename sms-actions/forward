@@ -1,36 +1,48 @@
 #!/bin/sh
 # SMS Custom Actions - replace /etc/forward with this file
-# https://github.com/davidedg/gl-inet-customisations/blob/main/sms-actions/forward
-
-# Call the original script first
-[[ -x /etc/forward-original ]] && /etc/forward-original "$@" &
 
 SCRIPTSDIR="/etc/sms-actions"
 
-# Initial scripts in init/ are always executed asynchronously
-D="$SCRIPTSDIR/init"
+call_scripts() {
+# Run asynchronously unless with an extension of ".wait" or ".waitNN" (wait max NN seconds)
+D="$SCRIPTSDIR/$1"
+shift
 scripts=$(ls "$D" | sort)
-for script in $scripts; do
-  [[ -f "$D/$script" ]] && [[ -x "$D/$script" ]] && "$D/$script" "$@" &
-done
-
-# Normal scripts, ran asynchronously unless they have an extension ".wait" or ".waitNN" (wait max NN seconds)
-D="$SCRIPTSDIR"
-scripts=$(ls "$D" | sort)
+stop_execution=0 # Initialize the flag to indicate no need to stop the execution
 for script in $scripts; do
     [[ -x "$D/$script" ]] || continue
     [[ -f "$D/$script" ]] || continue
     case "$script" in
         *.wait)
             "$D/$script" "$@"
+            if [ $? -eq 255 ]; then
+              stop_execution=1
+            fi
             ;;
         *.wait[0-9]*)
             waitterm=$(echo "$script" | sed -n 's/.*\.wait\([0-9]\+\)$/\1/p')
             waitkill="$((waitterm + 5))" # extra 5 seconds before KILL
             timeout -k $waitkill $waitterm "$D/$script" "$@"
+            if [ $? -eq 255 ]; then
+              stop_execution=1
+            fi
             ;;
         *)
             "$D/$script" "$@" &
+            # async scripts are not monitored for execution return code
             ;;
     esac
 done
+return $stop_execution  # Return the flag status at the end
+}
+
+call_scripts "pre" "$@"
+if [ $? -eq 1 ]; then
+    # Stop execution if any "pre" script set the stop_execution flag
+    exit 0
+fi
+
+# Call the original script
+[[ -x /etc/forward-original ]] && /etc/forward-original "$@" &
+
+call_scripts "post" "$@"
