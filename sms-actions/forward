@@ -15,7 +15,7 @@ for script in $scripts; do
     case "$script" in
         *.wait)
             "$D/$script" "$@"
-            if [ $? -eq 255 ]; then
+            if [ $? -eq 128 ]; then
               stop_execution=1
             fi
             ;;
@@ -23,7 +23,7 @@ for script in $scripts; do
             waitterm=$(echo "$script" | sed -n 's/.*\.wait\([0-9]\+\)$/\1/p')
             waitkill="$((waitterm + 5))" # extra 5 seconds before KILL
             timeout -k $waitkill $waitterm "$D/$script" "$@"
-            if [ $? -eq 255 ]; then
+            if [ $? -eq 128 ]; then
               stop_execution=1
             fi
             ;;
