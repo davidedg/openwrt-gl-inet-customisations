@@ -5,7 +5,6 @@ ALLOWED_NUMBERS="44123456789 32123456789 180012345678" # customise with your all
 ALLOWED_COMMANDS="reboot"
 #ALLOWED_COMMANDS="reboot status wifireset" # expand with your commands
 
-
 ######################################################
 # ALLOWED_COMMANDS functions:
 ######################################################
@@ -19,18 +18,17 @@ status() {
     # Add your status logic here
 }
 ######################################################
-wifi-reset() {
-    echo "Executing wifi-reset with arguments: $1 $2" >> /tmp/debug-smsactions.log
-    # Add your wifi-reset logic here
+wifireset() {
+    echo "Executing wifireset with arguments: $1 $2" >> /tmp/debug-smsactions.log
+    # Add your wifireset logic here
 }
 ######################################################
 
 
 
 ######################################################
-MAIN
+# MAIN
 ######################################################
-
 
 # Extract arguments
 action="$1"
@@ -65,8 +63,8 @@ if [ $is_number_allowed -eq 0 ]; then
 fi
 
 # Extract the SMS text (everything after the blank line following the "Length:" field)
-sms_text=$(echo "$content" | awk 'BEGIN {found_blank=0}
-    /Length:/ {found_blank=1}
+sms_text=$(echo "$content" | awk 'BEGIN {found_blank=0} 
+    /Length:/ {found_blank=1} 
     found_blank && NF==0 {getline; print; exit}')
 
 # Extract the command (the first word in the SMS text)
@@ -89,8 +87,8 @@ fi
 # Call the function named after the command, passing the SMS text as an argument
 "$command" "$from_number" "$sms_text"
 
-# Remove the now-processed SMS file
+# Remove the now-processed SMS command file
 rm -f $sms_file_path
 
 # And exit with the special code to prevent further processing
-exit 255
+exit 128
