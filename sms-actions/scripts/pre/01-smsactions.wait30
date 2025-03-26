@@ -2,28 +2,20 @@
 
 # Define space-separated allowed values
 ALLOWED_NUMBERS="44123456789 32123456789 180012345678" # customise with your allowed numbers
-ALLOWED_COMMANDS="reboot"
+ALLOWED_COMMANDS="reboot hardreboot"
 #ALLOWED_COMMANDS="reboot status wifireset" # expand with your commands
 
 ######################################################
 # ALLOWED_COMMANDS functions:
 ######################################################
 reboot() {
-    echo "Executing reboot with arguments: $1 $2" >> /tmp/debug-smsactions.log
-    # Add your reboot logic here
+    /sbin/reboot -d 10 &
 }
 ######################################################
-status() {
-    echo "Executing status with arguments: $1 $2" >> /tmp/debug-smsactions.log
-    # Add your status logic here
+hardreboot() {
+    /sbin/reboot -d 10 -f &
 }
 ######################################################
-wifireset() {
-    echo "Executing wifireset with arguments: $1 $2" >> /tmp/debug-smsactions.log
-    # Add your wifireset logic here
-}
-######################################################
-
 
 
 ######################################################
