@@ -1,0 +1,96 @@
+#!/bin/sh
+
+# Define space-separated allowed values
+ALLOWED_NUMBERS="44123456789 32123456789 180012345678" # customise with your allowed numbers
+ALLOWED_COMMANDS="reboot"
+#ALLOWED_COMMANDS="reboot status wifireset" # expand with your commands
+
+
+######################################################
+# ALLOWED_COMMANDS functions:
+######################################################
+reboot() {
+    echo "Executing reboot with arguments: $1 $2" >> /tmp/debug-smsactions.log
+    # Add your reboot logic here
+}
+######################################################
+status() {
+    echo "Executing status with arguments: $1 $2" >> /tmp/debug-smsactions.log
+    # Add your status logic here
+}
+######################################################
+wifi-reset() {
+    echo "Executing wifi-reset with arguments: $1 $2" >> /tmp/debug-smsactions.log
+    # Add your wifi-reset logic here
+}
+######################################################
+
+
+
+######################################################
+MAIN
+######################################################
+
+
+# Extract arguments
+action="$1"
+sms_file_path="$2"
+
+# Exit if the SMS action is not "RECEIVED"
+if [ "$action" != "RECEIVED" ]; then
+    exit 0
+fi
+
+# Verify the file exists
+if [ ! -f "$sms_file_path" ]; then
+    exit 0
+fi
+
+# Read the file content
+content=$(cat "$sms_file_path")
+
+# Extract the "From:" field
+from_number=$(echo "$content" | awk -F": " '/^From:/ {print $2}')
+
+# Check if the "From:" number is allowed
+is_number_allowed=0
+for number in $ALLOWED_NUMBERS; do
+    if [ "$from_number" = "$number" ]; then
+        is_number_allowed=1
+        break
+    fi
+done
+if [ $is_number_allowed -eq 0 ]; then
+    exit 0
+fi
+
+# Extract the SMS text (everything after the blank line following the "Length:" field)
+sms_text=$(echo "$content" | awk 'BEGIN {found_blank=0}
+    /Length:/ {found_blank=1}
+    found_blank && NF==0 {getline; print; exit}')
+
+# Extract the command (the first word in the SMS text)
+command=$(echo "$sms_text" | awk '{print $1}')
+
+# Check if the command is allowed
+is_command_allowed=0
+for allowed_command in $ALLOWED_COMMANDS; do
+    if [ "$command" = "$allowed_command" ]; then
+        is_command_allowed=1
+        break
+    fi
+done
+if [ $is_command_allowed -eq 0 ]; then
+    exit 0
+fi
+
+
+
+# Call the function named after the command, passing the SMS text as an argument
+"$command" "$from_number" "$sms_text"
+
+# Remove the now-processed SMS file
+rm -f $sms_file_path
+
+# And exit with the special code to prevent further processing
+exit 255
