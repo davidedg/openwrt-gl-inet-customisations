@@ -73,7 +73,7 @@ On the Cloud server, connect to the tunneled port:
 Harden SSH configuration: see [sshtunnel_sshd_config.txt](./sshtunnel_sshd_config.txt)
 
 \
-Harden SSH logging: Monitor /home/sshdocker/config/logs/openssh/current with Fail2Ban or SSHGuard.
+Harden SSH logging: Monitor /home/sshdocker/config/logs/openssh/current with Fail2Ban or [SSHGuard](./sshtunnel_sshguard.txt)
 
 \
 Harden IPTables configuration: see [sshtunnel_iptables.txt](./sshtunnel_iptables.txt)
