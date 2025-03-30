@@ -1,0 +1,22 @@
+
+# Update once:
+
+docker run --rm \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    containrrr/watchtower \
+    --run-once
+
+
+# Keep it running:
+
+cat <<EOF > docker-compose.yml
+name: watchtower
+services:
+    watchtower:
+        container_name: watchtower
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        image: containrrr/watchtower
+EOF
+
+docker compose up -d
