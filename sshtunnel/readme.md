@@ -70,17 +70,22 @@ On the Cloud server, connect to the tunneled port:
     docker exec -it  openssh-server ssh localhost -p 1022
 
 \
+Security:
+-------------
+
+\
 Harden SSH configuration: see [sshtunnel_sshd_config.txt](./sshtunnel_sshd_config.txt)
 
-\
 Harden SSH logging: Monitor /home/sshdocker/config/logs/openssh/current with Fail2Ban or [SSHGuard](./sshtunnel_sshguard.txt)
 
-\
 Harden IPTables configuration: see [sshtunnel_iptables.txt](./sshtunnel_iptables.txt)
+
+Remember to keep your docker image updates: see [docker_watchtower.txt](./docker_watchtower.txt)
 
 \
 Docs/Credits:
-\
+-------------
+
 [https://openwrt.org/docs/guide-user/services/ssh/sshtunnel](https://openwrt.org/docs/guide-user/services/ssh/sshtunnel)
 \
 [https://openwrt.org/docs/guide-user/security/dropbear.public-key.auth](https://openwrt.org/docs/guide-user/security/dropbear.public-key.auth)
@@ -92,3 +97,5 @@ Docs/Credits:
 [https://github.com/chr0mag/geoipsets](https://github.com/chr0mag/geoipsets)
 \
 [https://www.sshguard.net/](https://www.sshguard.net/)
+\
+[https://containrrr.dev/watchtower/](https://containrrr.dev/watchtower/)
