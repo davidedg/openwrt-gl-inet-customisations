@@ -31,7 +31,7 @@ Adjust PUID, PGID and PUBLIC_KEY to your env.
           - PASSWORD_ACCESS=false
           - PUBLIC_KEY=ssh-ed25519 AAAA.... root@GLDEVICE
           - USER_NAME=gldevice
-          - LOG_STDOUT=true
+          - LOG_STDOUT=false
         volumes:
           - /home/sshdocker/config:/config
         ports:
@@ -71,6 +71,9 @@ On the Cloud server, connect to the tunneled port:
 
 \
 Harden SSH configuration: see [sshtunnel_sshd_config.txt](./sshtunnel_sshd_config.txt)
+
+\
+Harden SSH logging: Monitor /home/sshdocker/config/logs/openssh/current with Fail2Ban or SSHGuard.
 
 \
 Harden IPTables configuration: see [sshtunnel_iptables.txt](./sshtunnel_iptables.txt)
