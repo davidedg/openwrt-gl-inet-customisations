@@ -1,0 +1,7 @@
+# /etc/sshguard/sshguard.conf
+BACKEND="/usr/libexec/sshguard/sshg-fw-ipset" # < changed to ipset to work with iptables (default on Ubuntu 24.04 is nftables)
+FILES="/home/sshdocker/config/logs/openssh/current"
+THRESHOLD=10
+BLOCK_TIME=1200
+DETECTION_TIME=1800
+WHITELIST_FILE=/etc/sshguard/whitelist
