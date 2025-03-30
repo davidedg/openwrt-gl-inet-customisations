@@ -5,13 +5,13 @@
 # Order of protections:
 #  Country Filter (Allow only selected countries)
 #  SSHGuard block (drop if SSHGuard detected abuse attempts on the dedicated SSH server)
-#  Recent filter (Allow no more than x attempts over y seconds from the same IP address)
+#  Recent filter (Allow no more than x attempts over y seconds from the same IP address) - tweak /sys/module/xt_recent/parameters/* to your needs.
 #  LIMIT  filter (Allow no more than z attempts per minute from any IP)
 #  (SSH server) SSH server limits (MaxAuthTries, MaxSessions, MaxStartups, etc.)
 #  (SSHGuard) SSHGuard reads the sshd logs and feedbacks into the sshguard4 ipset
 
 # IPSets must exist before this file is read by iptables-restore
-# On Ubuntu with ipset-persistent, modify /etc/iptables/ipsets, e.g.:
+# On Ubuntu with ipset-persistent, modify /etc/iptables/ipsets, e.g. (but tweak sizes to your needs):
 #create sshguard4 hash:net family inet hashsize 1024 maxelem 65536 bucketsize 12 initval 0x0b193434
 #create sshguard6 hash:net family inet6 hashsize 1024 maxelem 65536 bucketsize 12 initval 0x26845b04
 #create IT.ipv4 hash:net family inet hashsize 4096 maxelem 131072 comment bucketsize 12 initval 0x97822957
