@@ -1,4 +1,22 @@
+#################################################
+# Dockerized SSH server protections
+# docker internal port: 2222
 
+# Order of protections:
+#  Country Filter (Allow only selected countries)
+#  SSHGuard block (drop if SSHGuard detected abuse attempts on the dedicated SSH server)
+#  Recent filter (Allow no more than x attempts over y seconds from the same IP address)
+#  LIMIT  filter (Allow no more than z attempts per minute from any IP)
+#  (SSH server) SSH server limits (MaxAuthTries, MaxSessions, MaxStartups, etc.)
+#  (SSHGuard) SSHGuard reads the sshd logs and feedbacks into the sshguard4 ipset
+
+# IPSets must exist before this file is read by iptables-restore
+# On Ubuntu with ipset-persistent, modify /etc/iptables/ipsets, e.g.:
+#create sshguard4 hash:net family inet hashsize 1024 maxelem 65536 bucketsize 12 initval 0x0b193434
+#create sshguard6 hash:net family inet6 hashsize 1024 maxelem 65536 bucketsize 12 initval 0x26845b04
+#create IT.ipv4 hash:net family inet hashsize 4096 maxelem 131072 comment bucketsize 12 initval 0x97822957
+
+#################################################
 *filter
 :INPUT ACCEPT [0:0]
 :FORWARD ACCEPT [0:0]
@@ -6,19 +24,19 @@
 :DOCKER-USER [0:0]
 :SSHDOCKER [0:0]
 :SSHDOCKERCOUNTRYFILTER [0:0]
+:SSHDOCKERSSHGUARDLOGDROP [0:0]
 :SSHDOCKERRECENTLOGDROP [0:0]
 :SSHDOCKERLIMITALLOW [0:0]
-:sshguard [0:0]
-
-#################################################
-# Dockerized SSH server protections
-# docker internal port: 2222
 
 # Country filter - allow only specific countries ( see https://github.com/chr0mag/geoipsets )
 -A SSHDOCKERCOUNTRYFILTER -m set --match-set IT.ipv4 src -j LOG --log-prefix "[ipt]sshdocker-callow "
 -A SSHDOCKERCOUNTRYFILTER -m set --match-set IT.ipv4 src -j RETURN
 -A SSHDOCKERCOUNTRYFILTER -j LOG --log-prefix "[ipt]sshdocker-cblock "
 -A SSHDOCKERCOUNTRYFILTER -j DROP
+
+# LogDrop action for SSHGuard ipset
+-A SSHDOCKERSSHGUARDLOGDROP -j LOG --log-prefix "[ipt]sshdocker-sshgblock "
+-A SSHDOCKERSSHGUARDLOGDROP -j DROP
 
 # LogDrop action for RECENT module
 -A SSHDOCKERRECENTLOGDROP -j LOG --log-prefix "[ipt]sshdocker-rblock "
@@ -34,7 +52,7 @@
 -A SSHDOCKER -s 10.0.0.0/8     -j ACCEPT
 -A SSHDOCKER -j SSHDOCKERCOUNTRYFILTER
 # SSHGuard - see /etc/sshguard/sshguard.conf
--A SSHDOCKER -j sshguard
+-A SSHDOCKER -m set --match-set sshguard4 src -j SSHDOCKERSSHGUARDLOGDROP
 # RECENT module: track and block repeated connection attempts from the same IP
 -A SSHDOCKER -m recent --set
 -A SSHDOCKER -m recent --update --seconds 60 --hitcount 1 -j SSHDOCKERRECENTLOGDROP
