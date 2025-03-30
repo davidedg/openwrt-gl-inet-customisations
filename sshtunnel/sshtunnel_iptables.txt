@@ -1,0 +1,36 @@
+#################################################
+# Dockerized SSH server protections
+# docker internal port: 2222
+
+# Country filter - allow only specific countries ( see https://github.com/chr0mag/geoipsets )
+-A SSHDOCKERCOUNTRYFILTER -m set --match-set IT.ipv4 src -j LOG --log-prefix "[ipt]sshdocker-callow "
+-A SSHDOCKERCOUNTRYFILTER -m set --match-set IT.ipv4 src -j RETURN
+-A SSHDOCKERCOUNTRYFILTER -j LOG --log-prefix "[ipt]sshdocker-cblock "
+-A SSHDOCKERCOUNTRYFILTER -j DROP
+
+# LogDrop action for RECENT module
+-A SSHDOCKERRECENTLOGDROP -j LOG --log-prefix "[ipt]sshdocker-rblock "
+-A SSHDOCKERRECENTLOGDROP -j DROP
+
+# LogAccept action for LIMIT module
+-A SSHDOCKERLIMITALLOW -j LOG --log-prefix "[ipt]sshdocker-lallow "
+-A SSHDOCKERLIMITALLOW -j ACCEPT
+
+# Main SSHDocker chain
+-A SSHDOCKER -s 192.168.0.0/16 -j ACCEPT
+-A SSHDOCKER -s 172.16.0.0/12  -j ACCEPT
+-A SSHDOCKER -s 10.0.0.0/8     -j ACCEPT
+-A SSHDOCKER -j SSHDOCKERCOUNTRYFILTER
+# RECENT module: track and block repeated connection attempts from the same IP
+-A SSHDOCKER -m recent --set
+-A SSHDOCKER -m recent --update --seconds 60 --hitcount 1 -j SSHDOCKERRECENTLOGDROP
+# LIMIT module: allow up to 5 new connections (from any IP) per minute (rate limiting)
+-A SSHDOCKER -m limit --limit 5/min -j SSHDOCKERLIMITALLOW
+# Log+Drop all remaining attempts
+-A SSHDOCKER -j LOG --log-prefix "[ipt]sshdocker-block "
+-A SSHDOCKER -j DROP
+
+# Hook into the DOCKER-USER chain
+-I DOCKER-USER -p tcp -m state --state NEW -m tcp --dport 2222 -j SSHDOCKER
+
+####################################################################
