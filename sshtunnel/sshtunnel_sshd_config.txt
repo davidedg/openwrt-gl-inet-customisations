@@ -1,0 +1,11 @@
+PermitRootLogin no
+MaxAuthTries 1
+MaxSessions 2
+PasswordAuthentication no
+X11Forwarding no
+PermitTTY no
+PermitUserEnvironment no
+MaxStartups 1:1:2
+UseDNS no
+VersionAddendum none
+AllowUsers gldevice
