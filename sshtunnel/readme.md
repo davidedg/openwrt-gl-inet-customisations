@@ -69,8 +69,14 @@ On the Cloud server, connect to the tunneled port:
 
     docker exec -it  openssh-server ssh localhost -p 1022
 
+\
+Harden SSH configuration: see [sshtunnel_sshd_config.txt](./sshtunnel_sshd_config.txt)
 
-Docs:
+\
+Harden IPTables configuration: see [sshtunnel_iptables.txt](./sshtunnel_iptables.txt)
+
+\
+Docs/Credits:
 \
 [https://openwrt.org/docs/guide-user/services/ssh/sshtunnel](https://openwrt.org/docs/guide-user/services/ssh/sshtunnel)
 \
@@ -79,3 +85,5 @@ Docs:
 [https://github.com/linuxserver/docker-openssh-server](https://github.com/linuxserver/docker-openssh-server)
 \
 [https://gist.github.com/ssalonen/9755dfd631a60951a369d563bb20cd71](https://gist.github.com/ssalonen/9755dfd631a60951a369d563bb20cd71)
+\
+[https://github.com/chr0mag/geoipsets](https://github.com/chr0mag/geoipsets)
