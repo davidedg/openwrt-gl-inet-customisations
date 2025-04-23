@@ -15,12 +15,27 @@ async def start(session: ClientSession):
 
 
 async def main():
+    if len(sys.argv) < 2:
+        print("Usage: python script.py [arm|disarm]")
+        return
+    
+    action = sys.argv[1].lower()
+    if action not in ["arm", "disarm"]:
+        print("Invalid action. Use 'arm' or 'disarm'.")
+        return
+
     session = ClientSession()
     blink = await start(session)
     for name, camera in blink.cameras.items():
         print(name)
-    print ("ARMING...")
-    await blink.sync[BLINKMODULE].async_arm(True)
+
+    if action == "arm":
+        print("ARMING...")
+        await blink.sync[BLINKMODULE].async_arm(True)
+    elif action == "disarm":
+        print("DISARMING...")
+        await blink.sync[BLINKMODULE].async_arm(False)
+        
     await blink.save(CREDFILE)
     await session.close()
 
