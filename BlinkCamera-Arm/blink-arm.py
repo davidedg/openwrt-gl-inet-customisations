@@ -1,4 +1,5 @@
 import asyncio
+import sys
 from aiohttp import ClientSession
 from blinkpy.blinkpy import Blink
 from blinkpy.auth import Auth
@@ -18,7 +19,7 @@ async def main():
     if len(sys.argv) < 2:
         print("Usage: python script.py [arm|disarm]")
         return
-    
+
     action = sys.argv[1].lower()
     if action not in ["arm", "disarm"]:
         print("Invalid action. Use 'arm' or 'disarm'.")
@@ -35,7 +36,7 @@ async def main():
     elif action == "disarm":
         print("DISARMING...")
         await blink.sync[BLINKMODULE].async_arm(False)
-        
+
     await blink.save(CREDFILE)
     await session.close()
 
