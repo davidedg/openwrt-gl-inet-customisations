@@ -10,6 +10,13 @@ Install Docker Compose, add a dedicated user:
     adduser sshdocker docker
     
 
+Prepare an SSH key:
+
+    ssh-keygen -t ed25519 -f /tmp/sshtunnel_id_ed25519 -N ""
+
+Copy the public part on the docker compose file and transfer the private file to the device, to `/etc/config/sshtunnel_id_ed25519`
+
+\
 As the dedicated user, run a dockerised ssh server on a dedicated port:
 Adjust PUID, PGID and PUBLIC_KEY to your env.
 
@@ -51,6 +58,7 @@ On the OpenWRT device, prepare sshtunnel:
         option user gldevice
         option hostname     1.2.3.4
         option port 2222
+        option IdentityFile /etc/config/sshtunnel_id_ed25519
         option retrydelay 15
     
     config tunnelR ssh
@@ -81,6 +89,16 @@ Harden SSH logging: Monitor /home/sshdocker/config/logs/openssh/current with Fai
 Harden IPTables configuration: see [sshtunnel_iptables.txt](./sshtunnel_iptables.txt)
 
 Remember to keep your docker image updates: see [docker_watchtower.txt](./docker_watchtower.txt)
+
+\
+Reinstallation/FW Updates:
+-------------
+
+\
+Upon firmware update, the package might be lost. You might want to set up a cron job to reinstall it at the following boot and it will hopefully reuse the existing config files:
+
+        opkg update && opkg install sshtunnel
+
 
 \
 Docs/Credits:
