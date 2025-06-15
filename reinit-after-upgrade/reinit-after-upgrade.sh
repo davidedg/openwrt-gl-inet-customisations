@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 REINIT=false
 PACKAGES="htop mc"
 
@@ -33,7 +35,7 @@ SMSFORWARD=false
 
 $REINIT && (
   opkg update || exit
-  opkg install $PACKAGES
+  opkg install $PACKAGES || exit
 )
 
 $SSHTUNNEL && (
