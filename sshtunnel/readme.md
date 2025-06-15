@@ -30,6 +30,9 @@ Adjust PUID, PGID and PUBLIC_KEY to your env.
         image: lscr.io/linuxserver/openssh-server:latest
         container_name: openssh-server
         hostname: openssh-server
+        ipc: private
+        security_opt:
+          - no-new-privileges=true
         environment:
           - PUID=1000
           - PGID=1000
