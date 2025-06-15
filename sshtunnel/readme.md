@@ -16,11 +16,8 @@ Prepare an SSH key:
 Copy the public part on the docker compose file and transfer the private file to the device, to `/etc/config/sshtunnel_id_ed25519`
 
 \
-As the dedicated user, run a dockerised ssh server on a dedicated port:
-Adjust PUID, PGID and PUBLIC_KEY to your env.
+Run a dockerised ssh server on a dedicated port - adjust PUID, PGID and PUBLIC_KEY to your env.
 
-    sudo -i -u sshdocker
-    # now as the dedicated user:
     docker pull linuxserver/openssh-server
     cat <<EOF > docker-compose.yml
     ---
