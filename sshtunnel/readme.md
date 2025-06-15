@@ -7,7 +7,6 @@ Install Docker Compose, add a dedicated user:
 
     apt install -y docker.io docker-compose-v2
     adduser sshdocker
-    adduser sshdocker docker
     
 
 Prepare an SSH key:
