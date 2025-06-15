@@ -94,7 +94,7 @@ Reinstallation/FW Updates:
 -------------
 
 \
-Upon firmware updates, the package might be lost. You might want to set up a cron job to [reinstall](../reinit-after-upgrade/reinit-after-upgrade.bash) it at the subsequent boot:
+Upon firmware updates, the package might be lost. You might want to set up a cron job to [reinstall](../reinit-after-upgrade/reinit-after-upgrade.sh) it at the subsequent boot:
 
         * * * * * [ -f /root/reinit_complete ] || /etc/config/reinit-after-upgrade.bash
 
