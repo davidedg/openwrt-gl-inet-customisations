@@ -1,8 +1,9 @@
 #!/bin/sh
 
 REINIT=false
-PACKAGES=""
-SSHTUNNELPROFILE="cloudserver"
+PACKAGES="htop mc"
+
+SSHTUNNELPROFILE="ivadaras"
 SSHTUNNEL=false
 opkg status sshtunnel|grep ^Status:|grep install >/dev/null || (
   REINIT=true
@@ -15,6 +16,19 @@ opkg status kmod-fs-f2fs|grep ^Status:|grep install >/dev/null || (
   REINIT=true
   F2FS=true
   PACKAGES="$PACKAGES f2fs-tools kmod-fs-f2fs"
+)
+
+TRIGGERHAPPY=false
+opkg status triggerhappy|grep ^Status:|grep install >/dev/null || (
+  REINIT=true
+  TRIGGERHAPPY=true
+  PACKAGES="$PACKAGES kmod-usb-hid triggerhappy"
+)
+
+SMSFORWARD=false
+[ -f forward-original ] || (
+  REINIT=true
+  SMSFORWARD=true
 )
 
 $REINIT && (
@@ -39,6 +53,18 @@ $F2FS && (
   uci set fstab.@mount[-1].enabled='1' || exit
   uci commit fstab || exit
   service fstab boot
+)
+
+$SMSFORWARD && (
+  wget -O /etc/forward.new "https://github.com/davidedg/gl-inet-customisations/raw/refs/heads/main/sms-actions/forward" || exit
+  chmod +x /etc/forward.new || exit
+  cp /etc/forward /etc/forward-original || exit
+  mv -f /etc/forward.new /etc/forward
+)
+
+$TRIGGERHAPPY && (
+  cp -f /etc/config/blink_triggerhappy.conf /etc/triggerhappy/triggers.d/
+  service triggerhappy restart
 )
 
 touch /root/reinit_complete
