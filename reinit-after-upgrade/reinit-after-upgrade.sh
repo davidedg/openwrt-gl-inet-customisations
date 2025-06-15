@@ -3,7 +3,7 @@
 REINIT=false
 PACKAGES="htop mc"
 
-SSHTUNNELPROFILE="ivadaras"
+SSHTUNNELPROFILE="cloudserver"
 SSHTUNNEL=false
 opkg status sshtunnel|grep ^Status:|grep install >/dev/null || (
   REINIT=true
