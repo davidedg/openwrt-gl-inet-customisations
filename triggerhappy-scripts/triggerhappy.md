@@ -20,10 +20,10 @@ Verify your combinations with:
 
 Configure /etc/triggerhappy/triggers.d/triggers.conf, e.g.:
 
-    BTN_RIGHT+BTN_LEFT      1       /mnt/sda1/singleinstance.sh -l -t blink -x 60 -s /mnt/sda1/blink/chroot-blink-arm.sh
-    BTN_LEFT+BTN_RIGHT      1       /mnt/sda1/singleinstance.sh -l -t blink -x 60 -s /mnt/sda1/blink/chroot-blink-arm.sh
-    BTN_RIGHT+BTN_LEFT      0       /mnt/sda1/singleinstance.sh -l -t blink -x 60 -s /mnt/sda1/blink/chroot-blink-arm.sh
-    BTN_LEFT+BTN_RIGHT      0       /mnt/sda1/singleinstance.sh -l -t blink -x 60 -s /mnt/sda1/blink/chroot-blink-arm.sh
+    BTN_RIGHT+BTN_LEFT      1       /etc/config/singleinstance.sh -l -t blink -x 60 -s /mnt/sda1/blink/chroot-blink-arm.sh
+    BTN_LEFT+BTN_RIGHT      1       /etc/config/singleinstance.sh -l -t blink -x 60 -s /mnt/sda1/blink/chroot-blink-arm.sh
+    BTN_RIGHT+BTN_LEFT      0       /etc/config/singleinstance.sh -l -t blink -x 60 -s /mnt/sda1/blink/chroot-blink-arm.sh
+    BTN_LEFT+BTN_RIGHT      0       /etc/config/singleinstance.sh -l -t blink -x 60 -s /mnt/sda1/blink/chroot-blink-arm.sh
 
 
 Notes:
