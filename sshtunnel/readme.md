@@ -94,9 +94,9 @@ Reinstallation/FW Updates:
 -------------
 
 \
-Upon firmware update, the package might be lost. You might want to set up a cron job to reinstall it at the following boot and it will hopefully reuse the existing config files:
+Upon firmware updates, the package might be lost. You might want to set up a cron job to [reinstall](../reinit-after-upgrade/reinit-after-upgrade.bash) it at the subsequent boot:
 
-        opkg update && opkg install sshtunnel
+        * * * * * [ -f /root/reinit_complete ] || /etc/config/reinit-after-upgrade.bash
 
 
 \
