@@ -1,7 +1,7 @@
 #!/bin/sh
 # SMS Custom Actions - replace /etc/forward with this file
 
-SCRIPTSDIR="/etc/sms-actions"
+SCRIPTSDIR="/etc/config/sms-actions"
 
 call_scripts() {
 # Run asynchronously unless with an extension of ".wait" or ".waitNN" (wait max NN seconds)
