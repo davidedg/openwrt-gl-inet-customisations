@@ -1,3 +1,5 @@
+#!/bin/sh
+
 REINIT=false
 PACKAGES=""
 SSHTUNNELPROFILE="cloudserver"
