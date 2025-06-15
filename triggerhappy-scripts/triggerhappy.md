@@ -26,6 +26,12 @@ Configure /etc/triggerhappy/triggers.d/triggers.conf, e.g.:
     BTN_LEFT+BTN_RIGHT      0       /etc/config/singleinstance.sh -l -t blink -x 60 -s /mnt/sda1/blink/chroot-blink-arm.sh
 
 
+If using the AWS Lambda version:
+
+    BTN_LEFT       1       /etc/config/singleinstance.sh -l -t blink -x 60 -s /etc/config/blink-awslambda.sh arm
+    BTN_RIGHT      1       /etc/config/singleinstance.sh -l -t blink -x 60 -s /etc/config/blink-awslambda.sh disarm
+
+
 Notes:
 
 If you are testing this on a VMWare Workstation VM, you might need:
