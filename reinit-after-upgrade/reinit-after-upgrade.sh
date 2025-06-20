@@ -24,7 +24,7 @@ TRIGGERHAPPY=false
 opkg status triggerhappy|grep ^Status:|grep install >/dev/null || (
   REINIT=true
   TRIGGERHAPPY=true
-  PACKAGES="$PACKAGES kmod-usb-hid triggerhappy"
+  PACKAGES="$PACKAGES kmod-usb-hid triggerhappy coreutils-od coreutils-paste"
 )
 
 SMSFORWARD=false
