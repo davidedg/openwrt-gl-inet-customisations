@@ -64,5 +64,7 @@
 
 # Hook into the DOCKER-USER chain
 -I DOCKER-USER -p tcp -m state --state NEW -m tcp --dport 2222 -j SSHDOCKER
+# Add to the INPUT chain for PODMAN
+-A INPUT       -p tcp -m state --state NEW -m tcp --dport 65422 -j SSHDOCKER
 
 ####################################################################
