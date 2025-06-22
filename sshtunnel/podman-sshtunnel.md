@@ -95,7 +95,7 @@ Harden SSH logging: Monitor /home/sshdocker/config/logs/openssh/current with Fai
 
 Harden IPTables configuration: see [sshtunnel_iptables.txt](./sshtunnel_iptables.txt)
 
-Remember to keep your docker image updates: see [docker_watchtower.txt](./podman_update.txt)
+Remember to keep your docker image updates: see [podman_update.txt](./podman_update.txt)
 
 \
 Reinstallation/FW Updates:
