@@ -42,7 +42,7 @@ Run a dockerised ssh server on a dedicated port - adjust PUID, PGID and PUBLIC_K
           - /home/sshdocker/config:/config
         ports:
           - 2222:2222
-          - 1022:1022
+          - 2022:2022
         restart: unless-stopped
     EOF
 
@@ -63,7 +63,7 @@ On the OpenWRT device, prepare sshtunnel:
     config tunnelR ssh
             option server           cloudserver
             option remoteaddress    *
-            option remoteport       1022
+            option remoteport       2022
             option localaddress     127.0.0.1
             option localport        22
     EOF
@@ -74,7 +74,7 @@ Start it:
 
 On the Cloud server, connect to the tunneled port:
 
-    docker exec -it  openssh-server ssh localhost -p 1022
+    docker exec -it  openssh-server ssh localhost -p 2022
 
 \
 Security:
