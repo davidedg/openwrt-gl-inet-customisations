@@ -112,6 +112,8 @@ Docs/Credits:
 -------------
 [https://giacomo.coletto.io/blog/podman-quadlets/](https://giacomo.coletto.io/blog/podman-quadlets/)
 \
+[https://mag37.org/posts/guide_podman_quadlets/](https://mag37.org/posts/guide_podman_quadlets/)
+\
 [https://openwrt.org/docs/guide-user/services/ssh/sshtunnel](https://openwrt.org/docs/guide-user/services/ssh/sshtunnel)
 \
 [https://openwrt.org/docs/guide-user/security/dropbear.public-key.auth](https://openwrt.org/docs/guide-user/security/dropbear.public-key.auth)
